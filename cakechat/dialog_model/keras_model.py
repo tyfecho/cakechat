@@ -1,9 +1,10 @@
 import abc
 import os
 import time
+import tensorflow as tf
 from datetime import timedelta
 
-from keras import backend as K
+import tensorflow.keras.backend as K
 
 
 from cakechat.dialog_model.abstract_callbacks import AbstractKerasModelCallback, ParametrizedCallback, \
@@ -20,8 +21,8 @@ class KerasTFModelIsolator(object):
         # Use global keras (tensorflow) session config here
         keras_session_config = K.get_session()._config
 
-        self._keras_isolated_graph = K.tf.Graph()
-        self._keras_isolated_session = K.tf.Session(graph=self._keras_isolated_graph, config=keras_session_config)
+        self._keras_isolated_graph = tf.compat.v1.Graph()
+        self._keras_isolated_session = tf.Session(graph=self._keras_isolated_graph, config=keras_session_config)
 
     def _isolate_func(self, func):
         def wrapper(*args, **kwargs):

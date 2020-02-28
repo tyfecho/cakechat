@@ -81,4 +81,3 @@ def is_main_horovod_worker(horovod):
 def set_horovod_worker_random_seed(horovod):
     seed = horovod.rank() if horovod else 0
     np.random.seed(seed)
-

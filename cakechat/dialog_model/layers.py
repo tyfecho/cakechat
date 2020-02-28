@@ -1,4 +1,5 @@
-from keras.layers import K, RepeatVector, Lambda
+import tensorflow as tf
+from keras.layers import RepeatVector, Lambda
 
 
 def repeat_vector(inputs):
@@ -15,7 +16,7 @@ def repeat_vector(inputs):
     """
     layer_for_repeat, layer_for_getting_rep_num = inputs
     repeated_vector = RepeatVector(
-        n=K.shape(layer_for_getting_rep_num)[1], name='custom_repeat_vector')(layer_for_repeat)
+        n=tf.keras.backend.shape(layer_for_getting_rep_num)[1], name='custom_repeat_vector')(layer_for_repeat)
     # shape == (batch_size, seq_len, vector_dim)
     return repeated_vector
 
@@ -30,16 +31,16 @@ def softmax_with_temperature(logits, temperature):
 
     def softmax_with_temp(args):
         logits, temperature = args
-        repeat_num = K.shape(logits)[1]
+        repeat_num = tf.keras.backend.shape(logits)[1]
         temperature_repeated = RepeatVector(repeat_num)(temperature)
         # shape == (batch_size, seq_len)
         scaled_logits = logits / temperature_repeated
         # shape == (batch_size, seq_len, vocab_size)
 
         # for numerical stability (e.g. for low temperatures):
-        scaled_logits = scaled_logits - K.max(scaled_logits, axis=2, keepdims=True)
+        scaled_logits = scaled_logits - tf.keras.backend.max(scaled_logits, axis=2, keepdims=True)
         # shape == (batch_size, seq_len, vocab_size)
-        transformed_probs = K.softmax(scaled_logits)
+        transformed_probs = tf.keras.backend.softmax(scaled_logits)
         # shape == (batch_size, seq_len, vocab_size)
         return transformed_probs
 

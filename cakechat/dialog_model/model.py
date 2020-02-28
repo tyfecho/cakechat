@@ -5,7 +5,7 @@ from functools import partial
 import numpy as np
 import tensorflow as tf
 from keras import Input, Model, optimizers
-from keras.layers import K, Bidirectional, Embedding, Concatenate, Dense, Dropout, TimeDistributed, \
+from keras.layers import Bidirectional, Embedding, Concatenate, Dense, Dropout, TimeDistributed, \
     Reshape, Lambda, CuDNNGRU, GRU
 
 from cakechat.config import HIDDEN_LAYER_DIMENSION, GRAD_CLIP, LEARNING_RATE, TRAIN_WORD_EMBEDDINGS_LAYER, \
@@ -354,7 +354,7 @@ class CakeChatModel(AbstractKerasModel, WithLogger):
     def _decoder(self, tokens_emb_model, condition_emb_model):
         self._logger.info('Building decoder...')
 
-        thought_vector = Input(shape=(self._params.hidden_layer_dim, ), dtype=K.floatx(), name='dec_thought_vector')
+        thought_vector = Input(shape=(self._params.hidden_layer_dim, ), dtype=tf.keras.backend.floatx(), name='dec_thought_vector')
         # output shape == (batch_size, hidden_layer_dim)
         response_tokens_ids = tokens_emb_model.inputs[0]
         # output shape == (batch_size, seq_len)
@@ -370,7 +370,7 @@ class CakeChatModel(AbstractKerasModel, WithLogger):
         # otherwise you may encounter a keras bug that affects rnn stateful models
         # related discussion: https://github.com/keras-team/keras/issues/9385#issuecomment-365464721
         self._dec_hs_input = Input(
-            shape=(self._decoder_depth, self._params.hidden_layer_dim), dtype=K.floatx(), name='dec_hs')
+            shape=(self._decoder_depth, self._params.hidden_layer_dim), dtype=tf.keras.backend.floatx(), name='dec_hs')
         # shape == (batch_size, dec_depth, hidden_layer_dim)
 
         response_tokens_embeddings = tokens_emb_model(response_tokens_ids)

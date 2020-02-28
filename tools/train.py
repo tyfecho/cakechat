@@ -16,7 +16,7 @@ init_keras(hvd)
 # fix random seeds for experiments reproducibility
 random.seed(42)
 numpy.random.seed(42)
-tf.set_random_seed(42)
+tf.compat.v1.set_random_seed(42)
 
 from cakechat.config import BASE_CORPUS_NAME, TRAIN_CORPUS_NAME, CONTEXT_SENSITIVE_VAL_CORPUS_NAME, \
     USE_PRETRAINED_W2V_EMBEDDINGS_LAYER, S3_MODELS_BUCKET_NAME, S3_NN_MODEL_REMOTE_DIR, PREDICTION_MODE_FOR_TESTS
