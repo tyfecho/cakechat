@@ -33,7 +33,7 @@ def _train_model(tokenized_lines, voc_size, vec_size, window_size, skip_gram):
     tokenized_lines_for_voc, tokenized_lines_for_train = file_buffered_tee(tokenized_lines)
 
     model.build_vocab(tokenized_lines_for_voc)
-    model.train(tokenized_lines_for_train)
+    model.train(tokenized_lines_for_train, epochs=model.iter, total_examples=model.corpus_count)
 
     # forget the original vectors and only keep the normalized ones = saves lots of memory
     # https://radimrehurek.com/gensim/models/word2vec.html#gensim.models.word2vec.Word2Vec.init_sims

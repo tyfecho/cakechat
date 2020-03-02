@@ -29,9 +29,10 @@ def _unpickle_iterable(pickle_fh):
 
 
 def file_buffered_tee(iterable, n=2):
-    _, filename = tempfile.mkstemp()
+    fd, filename = tempfile.mkstemp()
     try:
         _pickle_iterable(filename, iterable)
         return tuple(_unpickle_iterable(_open_pickle(filename)) for _ in range(n))
     finally:
-        os.remove(filename)
+        os.close(fd)
+        #os.remove(filename)
